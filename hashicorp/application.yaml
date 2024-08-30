@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hashicorp
+  namespace: openshift-gitops
+spec:
+  project: default
+  sources:
+    - chart: vault
+      repoURL: https://helm.releases.hashicorp.com
+      targetRevision: 0.28.0
+      helm:
+        releaseName: hashicorp-vault
+        values: |
+          server:
+            readinessProbe:
+              enabled: false
+            livenessProbe:
+              enabled: false
+            standalone:
+              enabled: true
+            ha:
+              enabled: false
+          ui:
+            enabled: true
+            externalPort: 8200
+    - repoURL: https://github.com/neutron-IT-organization/gitops-catalog.git
+      targetRevision: main
+      path: hashicorp/base
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: hashicorp
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    managedNamespaceMetadata:
+      labels:
+        argocd.argoproj.io/managed-by: openshift-gitops

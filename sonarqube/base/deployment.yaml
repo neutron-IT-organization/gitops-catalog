@@ -1,0 +1,52 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: sonarqube
+  labels:
+    app: sonarqube
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sonarqube
+  template:
+    metadata:
+      labels:
+        app: sonarqube
+    spec:
+      containers:
+        - name: sonarqube
+          image: "docker.io/sonarqube:community"
+          ports:
+            - name: sonarqube
+              containerPort: 9000
+          volumeMounts:
+            - name: sonarqube-data
+              mountPath: /opt/sonarqube/data
+            - name: sonarqube-extensions
+              mountPath: /opt/sonarqube/extensions
+            - name: sonarqube-logs
+              mountPath: /opt/sonarqube/logs
+          env:
+            - name: SONAR_JDBC_URL
+              value: "jdbc:postgresql://postgres:5432/sonarqube"
+            - name: SONAR_JDBC_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: db-user
+                  key: username
+            - name: SONAR_JDBC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-user
+                  key: password
+      volumes:
+        - name: sonarqube-data
+          persistentVolumeClaim:
+            claimName: sonarqube-data-pvc
+        - name: sonarqube-extensions
+          persistentVolumeClaim:
+            claimName: sonarqube-extensions-pvc
+        - name: sonarqube-logs
+          persistentVolumeClaim:
+            claimName: sonarqube-logs-pvc

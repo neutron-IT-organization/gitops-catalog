@@ -1,0 +1,11 @@
+apiVersion: console.openshift.io/v1
+kind: ConsoleLink
+metadata:
+  name: sonarqube-console-link
+spec:
+  applicationMenu:
+    imageURL: https://assets-eu-01.kc-usercontent.com/64ba5402-320b-01f3-758a-878c16f16a91/12e3974b-220d-4cde-8f17-2ff9fa9d9c27/SonarQube_Logo.svg
+    section: Code Quality
+  href: YOUR-SONARQUBE-ROUTE
+  location: ApplicationMenu
+  text: SonarQube

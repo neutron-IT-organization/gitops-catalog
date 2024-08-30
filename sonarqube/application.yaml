@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sonarqube
+  namespace: openshift-gitops
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/neutron-IT-organization/gitops-catalog.git
+    targetRevision: main
+    path: sonarqube/base
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: sonarqube
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    managedNamespaceMetadata:
+      labels:
+        argocd.argoproj.io/managed-by: openshift-gitops

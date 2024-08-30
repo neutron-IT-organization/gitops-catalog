@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sonarqube
+spec:
+  ports:
+    - protocol: TCP
+      name: sonarqube
+      port: 9000
+  selector:
+    app: sonarqube
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+spec:
+  ports:
+    - protocol: TCP
+      name: postgres
+      port: 5432
+  selector:
+    app: postgres
