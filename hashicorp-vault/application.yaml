@@ -26,7 +26,7 @@ spec:
             externalPort: 8200
     - repoURL: https://github.com/neutron-IT-organization/gitops-catalog.git
       targetRevision: main
-      path: hashicorp/base
+      path: hashicorp-vault/base
   destination:
     server: "https://kubernetes.default.svc"
     namespace: hashicorp
